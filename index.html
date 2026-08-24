@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luke — Painting Studies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300..700,0..1&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:        #1C1815;
+    --bg-alt:    #221D19;
+    --panel:     #26201B;
+    --ink:       #EDE6DA;
+    --ink-dim:   #A79C8C;
+    --line:      #3A332C;
+    --cadmium:   #C1442D;
+    --ochre:     #C98A2C;
+    --ultra:     #3E5C78;
+    --viridian:  #4F6B58;
+
+    --display: 'Fraunces', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    font-weight:300;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:999;
+    opacity:0.05;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+
+  nav{
+    position:sticky; top:0; z-index:100;
+    background:rgba(28,24,21,0.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px; }
+  .wordmark{ font-family:var(--display); font-weight:600; font-size:1.15rem; letter-spacing:0.04em; text-decoration:none; }
+  .wordmark span{ color:var(--cadmium); }
+  .navlinks{ display:flex; gap:34px; list-style:none; align-items:center; }
+  .navlinks a{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s; }
+  .navlinks a:hover, .navlinks a:focus-visible{ color:var(--ink); }
+  .navlinks a.pill{ color:var(--bg); background:var(--ochre); padding:9px 16px; border-radius:2px; font-weight:500; }
+  .navlinks a.pill:hover{ background:var(--ink); color:var(--bg); }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding:96px 0 64px; position:relative; }
+  .hero .wrap{ display:grid; grid-template-columns:1.4fr 1fr; gap:56px; align-items:end; }
+  .eyebrow{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ochre); margin-bottom:22px; display:block; }
+  h1.hero-title{ font-family:var(--display); font-weight:400; font-size:clamp(2.6rem, 6vw, 4.6rem); line-height:1.02; letter-spacing:-0.01em; }
+  h1.hero-title em{ font-style:italic; font-weight:300; color:var(--ink-dim); }
+  .hero-sub{ max-width:36ch; color:var(--ink-dim); font-size:1.02rem; margin-top:22px; }
+
+  .palette{ position:relative; height:220px; }
+  .palette-label{ font-family:var(--mono); font-size:0.68rem; color:var(--ink-dim); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px; display:block; }
+  .daubs{ position:relative; width:100%; height:170px; }
+  .daub{ position:absolute; border-radius:58% 42% 61% 39% / 45% 55% 45% 55%; box-shadow:0 6px 18px rgba(0,0,0,0.35); cursor:crosshair; transition:transform .5s cubic-bezier(.2,.8,.2,1), filter .5s; }
+  .daub:hover{ transform:scale(1.14) rotate(-4deg); filter:brightness(1.12); z-index:5; }
+  .daub .tag{ position:absolute; bottom:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:0.62rem; letter-spacing:0.06em; color:var(--ink-dim); white-space:nowrap; opacity:0; transition:opacity .3s; text-transform:uppercase; }
+  .daub:hover .tag{ opacity:1; }
+  .d1{ width:92px; height:78px; top:6px; left:0; background:radial-gradient(circle at 32% 30%, #d8583c, var(--cadmium) 70%); }
+  .d2{ width:76px; height:68px; top:0; left:70px; background:radial-gradient(circle at 30% 30%, #e0a544, var(--ochre) 70%); }
+  .d3{ width:100px; height:84px; top:40px; left:132px; background:radial-gradient(circle at 30% 30%, #5b83a8, var(--ultra) 72%); }
+  .d4{ width:70px; height:62px; top:98px; left:20px; background:radial-gradient(circle at 30% 30%, #6f9280, var(--viridian) 72%); }
+  .d5{ width:58px; height:52px; top:110px; left:96px; background:radial-gradient(circle at 30% 30%, #f1e8d8, #cfc3ab 75%); }
+  .d6{ width:64px; height:58px; top:78px; left:210px; background:radial-gradient(circle at 30% 30%, #241d18, #362c25 75%); }
+
+  .scroll-cue{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--ink-dim); margin-top:56px;
+  }
+  .scroll-cue .line{ width:36px; height:1px; background:var(--ink-dim); position:relative; overflow:hidden; }
+  .scroll-cue .line::after{
+    content:""; position:absolute; left:-100%; top:0; width:100%; height:100%; background:var(--ochre);
+    animation:scrollline 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollline{ 0%{ left:-100%; } 50%{ left:100%; } 100%{ left:100%; } }
+
+  /* ---------- SHOWCASE ---------- */
+  .showcase{ padding:40px 0 60px; }
+  .show-item{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+    align-items:center;
+    padding:100px 0;
+    opacity:0;
+    transform:translateY(48px);
+    transition:opacity .9s cubic-bezier(.2,.7,.3,1), transform .9s cubic-bezier(.2,.7,.3,1);
+  }
+  .show-item.in-view{ opacity:1; transform:translateY(0); }
+  .show-item:nth-child(even) .show-media{ order:2; }
+  .show-item:nth-child(even) .show-copy{ order:1; }
+
+  .show-media{
+    position:relative;
+    border-radius:2px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -24px rgba(0,0,0,0.65);
+    border:1px solid rgba(237,230,218,0.06);
+    background:var(--panel);
+    aspect-ratio:4/5;
+    transform:scale(0.96);
+    transition:transform 1.1s cubic-bezier(.2,.7,.3,1);
+  }
+  .show-item.in-view .show-media{ transform:scale(1); }
+  .show-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .show-index{
+    font-family:var(--mono); font-size:0.72rem; color:var(--ochre); letter-spacing:0.1em;
+    margin-bottom:18px; display:block;
+  }
+  .show-copy h3{
+    font-family:var(--display); font-style:italic; font-weight:400;
+    font-size:clamp(1.6rem, 3vw, 2.3rem); margin-bottom:14px; line-height:1.15;
+  }
+  .show-copy p{ color:var(--ink-dim); max-width:42ch; font-size:0.98rem; }
+  .show-copy .medium{
+    display:block; margin-top:20px; font-family:var(--mono); font-size:0.66rem;
+    color:var(--ink-dim); letter-spacing:0.05em; text-transform:uppercase;
+    border-top:1px solid var(--line); padding-top:14px; max-width:220px;
+  }
+
+  @media (max-width:860px){
+    .show-item{ grid-template-columns:1fr; gap:28px; padding:60px 0; }
+    .show-item:nth-child(even) .show-media, .show-item:nth-child(even) .show-copy{ order:initial; }
+  }
+
+  /* ---------- CTA ---------- */
+  .cta{
+    border-top:1px solid var(--line);
+    background:var(--bg-alt);
+    padding:100px 0;
+    text-align:center;
+  }
+  .cta h2{
+    font-family:var(--display); font-weight:400;
+    font-size:clamp(2rem,4.5vw,3.2rem);
+    margin-bottom:20px;
+  }
+  .cta p{ color:var(--ink-dim); max-width:44ch; margin:0 auto 36px; }
+  .cta-btn{
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:var(--mono); font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--bg); background:var(--ochre); text-decoration:none;
+    padding:16px 30px; border-radius:2px; transition:background .25s, transform .25s;
+  }
+  .cta-btn:hover{ background:var(--ink); transform:translateY(-2px); }
+  .cta-btn .arrow{ transition:transform .25s; }
+  .cta-btn:hover .arrow{ transform:translateX(4px); }
+
+  /* ---------- PRACTICE ---------- */
+  .practice{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--bg-alt); padding:44px 0; }
+  .practice .wrap{ display:flex; align-items:center; gap:40px; flex-wrap:wrap; }
+  .practice-copy{ max-width:280px; }
+  .practice-copy h2{ font-family:var(--display); font-size:1.3rem; font-weight:500; margin-bottom:8px; }
+  .practice-copy p{ color:var(--ink-dim); font-size:0.9rem; }
+  .streak{ display:grid; grid-template-columns:repeat(15, 1fr); gap:6px; flex:1; min-width:280px; }
+  .streak i{ display:block; width:100%; aspect-ratio:1; border-radius:3px; background:var(--line); }
+  .streak i.on{ background:var(--cadmium); opacity:var(--o,1); }
+  .streak-note{ font-family:var(--mono); font-size:0.65rem; color:var(--ink-dim); letter-spacing:0.05em; margin-top:10px; width:100%; }
+
+  footer{ border-top:1px solid var(--line); background:var(--bg); padding:64px 0 40px; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px; }
+  footer h2{ font-family:var(--display); font-weight:400; font-size:clamp(1.7rem,3vw,2.3rem); max-width:14ch; }
+  .contact-links{ display:flex; gap:28px; flex-wrap:wrap; }
+  .contact-links a{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; text-decoration:none; color:var(--ink-dim); border-bottom:1px solid var(--line); padding-bottom:4px; transition:color .25s, border-color .25s; }
+  .contact-links a:hover, .contact-links a:focus-visible{ color:var(--ochre); border-color:var(--ochre); }
+  .fineprint{ margin-top:48px; font-family:var(--mono); font-size:0.62rem; color:var(--ink-dim); opacity:0.6; letter-spacing:0.04em; }
+
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--ochre); outline-offset:3px; }
+
+  @media (max-width:860px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .palette{ height:auto; margin-top:20px; }
+    .navlinks{ gap:16px; }
+    .navlinks a:not(.pill){ display:none; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; scroll-behavior:auto !important; animation:none !important; }
+    .show-item{ opacity:1; transform:none; }
+    .show-media{ transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="index.html" class="wordmark">LUKE<span>.</span></a>
+    <ul class="navlinks">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#practice">Practice</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="gallery.html" class="pill">Full Gallery</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Oil on canvas &amp; panel</span>
+      <h1 class="hero-title">Studies in <em>slow</em><br>looking.</h1>
+      <p class="hero-sub">A working record of paintings — landscapes, still lifes, storefronts, and studies of sky and water, made one session at a time, in oil.</p>
+      <div class="scroll-cue"><span class="line"></span> Scroll to see selected work</div>
+    </div>
+    <div class="palette">
+      <span class="palette-label">Today's mix</span>
+      <div class="daubs">
+        <div class="daub d1"><span class="tag">Cadmium red</span></div>
+        <div class="daub d2"><span class="tag">Yellow ochre</span></div>
+        <div class="daub d3"><span class="tag">Ultramarine</span></div>
+        <div class="daub d4"><span class="tag">Viridian</span></div>
+        <div class="daub d5"><span class="tag">Titanium white</span></div>
+        <div class="daub d6"><span class="tag">Raw umber</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="showcase wrap" id="work">
+  
+  <div class="show-item">
+    <div class="show-media"><img src="paintings/IMG_8374.jpeg" alt="Sunflowers" loading="lazy"></div>
+    <div class="show-copy">
+      <span class="show-index">01 / 07</span>
+      <h3>Sunflowers</h3>
+      <p>A studio still life, worked wet-into-wet in a single sitting — the classic subject as a color exercise as much as a bouquet.</p>
+      <span class="medium">Oil on canvas</span>
+    </div>
+  </div>
+  <div class="show-item">
+    <div class="show-media"><img src="paintings/IMG_8798.jpeg" alt="Island, Still Water" loading="lazy"></div>
+    <div class="show-copy">
+      <span class="show-index">02 / 07</span>
+      <h3>Island, Still Water</h3>
+      <p>A small tree-covered island on calm water, painted for the reflections as much as the landscape itself.</p>
+      <span class="medium">Oil on canvas</span>
+    </div>
+  </div>
+  <div class="show-item">
+    <div class="show-media"><img src="paintings/IMG_8492.jpeg" alt="Mountain Meadow" loading="lazy"></div>
+    <div class="show-copy">
+      <span class="show-index">03 / 07</span>
+      <h3>Mountain Meadow</h3>
+      <p>Wildflowers in the foreground set against a hazy mountain ridge — a study in atmospheric depth.</p>
+      <span class="medium">Oil on canvas</span>
+    </div>
+  </div>
+  <div class="show-item">
+    <div class="show-media"><img src="paintings/IMG_8186.jpeg" alt="Bridge Crossing" loading="lazy"></div>
+    <div class="show-copy">
+      <span class="show-index">04 / 07</span>
+      <h3>Bridge Crossing</h3>
+      <p>A hazy river crossing, painted for the soft edges where architecture dissolves into distance.</p>
+      <span class="medium">Oil on canvas</span>
+    </div>
+  </div>
+  <div class="show-item">
+    <div class="show-media"><img src="paintings/IMG_8002.jpeg" alt="Sunset Tide Pool" loading="lazy"></div>
+    <div class="show-copy">
+      <span class="show-index">05 / 07</span>
+      <h3>Sunset Tide Pool</h3>
+      <p>Warm sky over cold water — a quick study chasing a fast-changing sky.</p>
+      <span class="medium">Oil on canvas</span>
+    </div>
+  </div>
+  <div class="show-item">
+    <div class="show-media"><img src="paintings/IMG_8194.jpeg" alt="Pool Hall" loading="lazy"></div>
+    <div class="show-copy">
+      <span class="show-index">06 / 07</span>
+      <h3>Pool Hall</h3>
+      <p>An interior study built from cool purples and a single hot green table.</p>
+      <span class="medium">Oil on canvas</span>
+    </div>
+  </div>
+  <div class="show-item">
+    <div class="show-media"><img src="paintings/IMG_8298.jpeg" alt="Breaking Waves" loading="lazy"></div>
+    <div class="show-copy">
+      <span class="show-index">07 / 07</span>
+      <h3>Breaking Waves</h3>
+      <p>Close-in ocean study, painted for the movement and color shift in the surf.</p>
+      <span class="medium">Oil on canvas</span>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <h2>See everything.</h2>
+    <p>The full gallery holds the complete record — every study, every session, in one place.</p>
+    <a href="gallery.html" class="cta-btn">View full gallery <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<section class="practice" id="practice">
+  <div class="wrap">
+    <div class="practice-copy">
+      <h2>Daily practice</h2>
+      <p>One small study most days — a discipline more than a portfolio piece. This log tracks the streak, not the outcome.</p>
+    </div>
+    <div>
+      <div class="streak" id="streak"></div>
+      <div class="streak-note">45 days — one square per session</div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Let's talk about a piece.</h2>
+    <div class="contact-links">
+      <a href="mailto:hello@example.com">Email</a>
+      <a href="#">Instagram</a>
+      <a href="#">YouTube — daily practice</a>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="fineprint">© 2026 Luke. All paintings shown are original works from an ongoing daily practice.</p>
+  </div>
+</footer>
+
+<script>
+  const streakEl = document.getElementById('streak');
+  const days = 45;
+  for (let i = 0; i < days; i++) {
+    const s = document.createElement('i');
+    const skip = (i % 7 === 3) || (i % 11 === 0 && i > 0);
+    if (!skip) {
+      s.classList.add('on');
+      s.style.setProperty('--o', (0.45 + Math.random() * 0.55).toFixed(2));
+    }
+    streakEl.appendChild(s);
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.22 });
+
+  document.querySelectorAll('.show-item').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

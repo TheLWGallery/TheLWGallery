@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luke — Painting Studies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300..700,0..1&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:        #1C1815;
+    --bg-alt:    #221D19;
+    --panel:     #26201B;
+    --ink:       #EDE6DA;
+    --ink-dim:   #A79C8C;
+    --line:      #3A332C;
+    --cadmium:   #C1442D;
+    --ochre:     #C98A2C;
+    --ultra:     #3E5C78;
+    --viridian:  #4F6B58;
+
+    --display: 'Fraunces', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    font-weight:300;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:999;
+    opacity:0.05;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+
+  nav{
+    position:sticky; top:0; z-index:100;
+    background:rgba(28,24,21,0.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px; }
+  .wordmark{ font-family:var(--display); font-weight:600; font-size:1.15rem; letter-spacing:0.04em; text-decoration:none; }
+  .wordmark span{ color:var(--cadmium); }
+  .navlinks{ display:flex; gap:34px; list-style:none; }
+  .navlinks a{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s; }
+  .navlinks a:hover, .navlinks a:focus-visible{ color:var(--ink); }
+  .navlinks a.pill{ color:var(--bg); background:var(--ochre); padding:9px 16px; border-radius:2px; font-weight:500; }
+  .navlinks a.pill:hover{ background:var(--ink); color:var(--bg); }
+
+
+  .hero{ padding:96px 0 64px; position:relative; }
+  .hero .wrap{ display:grid; grid-template-columns:1.4fr 1fr; gap:56px; align-items:end; }
+  .eyebrow{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ochre); margin-bottom:22px; display:block; }
+  h1.hero-title{ font-family:var(--display); font-weight:400; font-size:clamp(2.6rem, 6vw, 4.6rem); line-height:1.02; letter-spacing:-0.01em; }
+  h1.hero-title em{ font-style:italic; font-weight:300; color:var(--ink-dim); }
+  .hero-sub{ max-width:36ch; color:var(--ink-dim); font-size:1.02rem; margin-top:22px; }
+
+  .palette{ position:relative; height:220px; }
+  .palette-label{ font-family:var(--mono); font-size:0.68rem; color:var(--ink-dim); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px; display:block; }
+  .daubs{ position:relative; width:100%; height:170px; }
+  .daub{ position:absolute; border-radius:58% 42% 61% 39% / 45% 55% 45% 55%; box-shadow:0 6px 18px rgba(0,0,0,0.35); cursor:crosshair; transition:transform .5s cubic-bezier(.2,.8,.2,1), filter .5s; }
+  .daub:hover{ transform:scale(1.14) rotate(-4deg); filter:brightness(1.12); z-index:5; }
+  .daub .tag{ position:absolute; bottom:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:0.62rem; letter-spacing:0.06em; color:var(--ink-dim); white-space:nowrap; opacity:0; transition:opacity .3s; text-transform:uppercase; }
+  .daub:hover .tag{ opacity:1; }
+  .d1{ width:92px; height:78px; top:6px; left:0; background:radial-gradient(circle at 32% 30%, #d8583c, var(--cadmium) 70%); }
+  .d2{ width:76px; height:68px; top:0; left:70px; background:radial-gradient(circle at 30% 30%, #e0a544, var(--ochre) 70%); }
+  .d3{ width:100px; height:84px; top:40px; left:132px; background:radial-gradient(circle at 30% 30%, #5b83a8, var(--ultra) 72%); }
+  .d4{ width:70px; height:62px; top:98px; left:20px; background:radial-gradient(circle at 30% 30%, #6f9280, var(--viridian) 72%); }
+  .d5{ width:58px; height:52px; top:110px; left:96px; background:radial-gradient(circle at 30% 30%, #f1e8d8, #cfc3ab 75%); }
+  .d6{ width:64px; height:58px; top:78px; left:210px; background:radial-gradient(circle at 30% 30%, #241d18, #362c25 75%); }
+
+  .practice{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--bg-alt); padding:44px 0; }
+  .practice .wrap{ display:flex; align-items:center; gap:40px; flex-wrap:wrap; }
+  .practice-copy{ max-width:280px; }
+  .practice-copy h2{ font-family:var(--display); font-size:1.3rem; font-weight:500; margin-bottom:8px; }
+  .practice-copy p{ color:var(--ink-dim); font-size:0.9rem; }
+  .streak{ display:grid; grid-template-columns:repeat(15, 1fr); gap:6px; flex:1; min-width:280px; }
+  .streak i{ display:block; width:100%; aspect-ratio:1; border-radius:3px; background:var(--line); }
+  .streak i.on{ background:var(--cadmium); opacity:var(--o,1); }
+  .streak-note{ font-family:var(--mono); font-size:0.65rem; color:var(--ink-dim); letter-spacing:0.05em; margin-top:10px; width:100%; }
+
+  .section-head{ padding:80px 0 36px; }
+  .section-head .eyebrow{ margin-bottom:14px; }
+  .section-head h2{ font-family:var(--display); font-weight:400; font-size:clamp(1.8rem,3.4vw,2.6rem); }
+  .section-note{ color:var(--ink-dim); font-size:0.9rem; max-width:52ch; margin-top:8px; }
+
+  .gallery{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:28px; padding-bottom:40px; }
+  .canvas{ width:100%; aspect-ratio:3/4; border-radius:2px; position:relative; overflow:hidden; box-shadow:0 18px 40px -18px rgba(0,0,0,0.6); border:1px solid rgba(237,230,218,0.06); background:#26201B; }
+  .canvas img{ width:100%; height:100%; object-fit:contain; display:block; }
+  .label{ display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; padding-top:10px; border-top:1px solid var(--line); font-family:var(--mono); gap:12px; }
+  .label .name{ font-family:var(--display); font-style:italic; font-size:0.98rem; color:var(--ink); }
+  .label .meta{ font-size:0.64rem; color:var(--ink-dim); text-align:right; letter-spacing:0.03em; line-height:1.6; white-space:nowrap; }
+
+  .about{ border-top:1px solid var(--line); padding:88px 0; }
+  .about .wrap{ display:grid; grid-template-columns:0.8fr 1.2fr; gap:64px; align-items:center; }
+  .portrait{ aspect-ratio:3/4; border-radius:2px; background:radial-gradient(120% 100% at 30% 20%, #4a3428, #201612 65%); position:relative; overflow:hidden; box-shadow:0 18px 40px -18px rgba(0,0,0,0.6); }
+  .portrait::after{ content:""; position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E"); mix-blend-mode:overlay; }
+  .about-copy p{ color:var(--ink-dim); margin-bottom:16px; max-width:52ch; }
+  .about-copy p:first-child{ color:var(--ink); font-size:1.08rem; }
+
+  footer{ border-top:1px solid var(--line); background:var(--bg-alt); padding:64px 0 40px; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px; }
+  footer h2{ font-family:var(--display); font-weight:400; font-size:clamp(1.7rem,3vw,2.3rem); max-width:14ch; }
+  .contact-links{ display:flex; gap:28px; flex-wrap:wrap; }
+  .contact-links a{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; text-decoration:none; color:var(--ink-dim); border-bottom:1px solid var(--line); padding-bottom:4px; transition:color .25s, border-color .25s; }
+  .contact-links a:hover, .contact-links a:focus-visible{ color:var(--ochre); border-color:var(--ochre); }
+  .fineprint{ margin-top:48px; font-family:var(--mono); font-size:0.62rem; color:var(--ink-dim); opacity:0.6; letter-spacing:0.04em; }
+
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--ochre); outline-offset:3px; }
+
+  @media (max-width:860px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .palette{ height:auto; margin-top:20px; }
+    .about .wrap{ grid-template-columns:1fr; }
+    .portrait{ max-width:280px; }
+    .gallery{ grid-template-columns:repeat(2,1fr); gap:16px; }
+    .navlinks{ display:none; }
+  }
+  @media (max-width:520px){
+    .gallery{ grid-template-columns:1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto !important; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="index.html" class="wordmark">LUKE<span>.</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html#work">Selected Work</a></li>
+      <li><a href="index.html#practice">Practice</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="index.html" class="pill">Home</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top" style="padding-bottom:24px;">
+  <div class="wrap" style="display:block;">
+    <span class="eyebrow">Complete record</span>
+    <h1 class="hero-title" style="font-size:clamp(2.2rem,5vw,3.6rem);">Full gallery.</h1>
+    <p class="hero-sub">Every study, every session — the complete archive, not just the highlights.</p>
+  </div>
+</header>
+
+<main>
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head" style="padding-top:24px;">
+        <p class="section-note">Full, uncropped photos — titles below are placeholders — swap in your own titles, mediums, and dimensions any time.</p>
+      </div>
+      <div class="gallery" id="gallery"></div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Let's talk about a piece.</h2>
+    <div class="contact-links">
+      <a href="mailto:hello@example.com">Email</a>
+      <a href="#">Instagram</a>
+      <a href="#">YouTube — daily practice</a>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="fineprint">© 2026 Luke. All paintings shown are original works from an ongoing daily practice.</p>
+  </div>
+</footer>
+
+<script>
+  const WORKS = [{"title": "Island, Still Water", "medium": "Oil on canvas", "src": "paintings/IMG_8798.jpeg"}, {"title": "Garden Study", "medium": "Oil on canvas", "src": "paintings/IMG_8622.jpeg"}, {"title": "Blue Study", "medium": "Oil on canvas", "src": "paintings/IMG_8623.jpeg"}, {"title": "Mountain Meadow", "medium": "Oil on canvas", "src": "paintings/IMG_8492.jpeg"}, {"title": "Sunflowers", "medium": "Oil on canvas", "src": "paintings/IMG_8374.jpeg"}, {"title": "Tide Rocks, Small Study", "medium": "Oil on canvas", "src": "paintings/IMG_8301.jpeg"}, {"title": "Breaking Waves", "medium": "Oil on canvas", "src": "paintings/IMG_8298.jpeg"}, {"title": "Clouds Over Water", "medium": "Oil on canvas", "src": "paintings/IMG_8207.jpeg"}, {"title": "Pool Hall", "medium": "Oil on canvas", "src": "paintings/IMG_8194.jpeg"}, {"title": "Bridge Crossing", "medium": "Oil on canvas", "src": "paintings/IMG_8186.jpeg"}, {"title": "Two Trees, Sunset", "medium": "Oil on canvas", "src": "paintings/IMG_8144.jpeg"}, {"title": "Sky Study, Blue and Gold", "medium": "Oil on canvas", "src": "paintings/IMG_8098.jpeg"}, {"title": "Sky Study, Large", "medium": "Oil on canvas", "src": "paintings/IMG_8068.jpeg"}, {"title": "Tattoo Shop &amp; Cloud Study", "medium": "Oil on canvas", "src": "paintings/IMG_8069.jpeg"}, {"title": "Tattoo Shop, Main Street", "medium": "Oil on canvas", "src": "paintings/IMG_8055.jpeg"}, {"title": "Cloud Study II", "medium": "Oil on canvas", "src": "paintings/IMG_8025.jpeg"}, {"title": "Sunset Tide Pool", "medium": "Oil on canvas", "src": "paintings/IMG_8002.jpeg"}, {"title": "Studio Still Life &amp; Chile Study", "medium": "Oil on canvas", "src": "paintings/IMG_7896.jpeg"}, {"title": "Ridge Line &amp; Evening Shore", "medium": "Oil on canvas", "src": "paintings/IMG_7998.jpeg"}, {"title": "Cloud Study III &amp; Sunset Study", "medium": "Oil on canvas", "src": "paintings/IMG_8026.jpeg"}];
+
+  const galleryEl = document.getElementById('gallery');
+  WORKS.forEach(w => {
+    const piece = document.createElement('div');
+    piece.className = 'piece';
+    piece.innerHTML = `
+      <div class="canvas"><img src="${w.src}" alt="${w.title}" loading="lazy"></div>
+      <div class="label">
+        <span class="name">${w.title}</span>
+        <span class="meta">${w.medium}</span>
+      </div>
+    `;
+    galleryEl.appendChild(piece);
+  });
+</script>
+
+</body>
+</html>
