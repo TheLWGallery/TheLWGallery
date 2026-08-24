@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — Luke</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300..700,0..1&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:        #1C1815;
+    --bg-alt:    #221D19;
+    --panel:     #26201B;
+    --ink:       #EDE6DA;
+    --ink-dim:   #A79C8C;
+    --line:      #3A332C;
+    --cadmium:   #C1442D;
+    --ochre:     #C98A2C;
+    --ultra:     #3E5C78;
+    --viridian:  #4F6B58;
+
+    --display: 'Fraunces', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    font-weight:300;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:999;
+    opacity:0.05;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+
+  nav{
+    position:sticky; top:0; z-index:100;
+    background:rgba(28,24,21,0.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px; }
+  .wordmark{ font-family:var(--display); font-weight:600; font-size:1.15rem; letter-spacing:0.04em; text-decoration:none; }
+  .wordmark span{ color:var(--cadmium); }
+  .navlinks{ display:flex; gap:34px; list-style:none; align-items:center; }
+  .navlinks a{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; transition:color .25s; }
+  .navlinks a:hover, .navlinks a:focus-visible{ color:var(--ink); }
+  .navlinks a.pill{ color:var(--bg); background:var(--ochre); padding:9px 16px; border-radius:2px; font-weight:500; }
+  .navlinks a.pill:hover{ background:var(--ink); color:var(--bg); }
+  @media (max-width:860px){ .navlinks a:not(.pill){ display:none; } }
+
+  .hero{ padding:80px 0 48px; }
+  .eyebrow{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ochre); margin-bottom:22px; display:block; }
+  h1.hero-title{ font-family:var(--display); font-weight:400; font-size:clamp(2.2rem, 5vw, 3.6rem); line-height:1.05; letter-spacing:-0.01em; }
+  .hero-sub{ max-width:52ch; color:var(--ink-dim); font-size:1.02rem; margin-top:18px; }
+
+  /* ---------- INFO STRIP ---------- */
+  .info-strip{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--bg-alt);
+    padding:36px 0;
+  }
+  .info-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:32px;
+  }
+  .info-item .num{ font-family:var(--mono); font-size:0.68rem; color:var(--ochre); letter-spacing:0.08em; display:block; margin-bottom:8px; }
+  .info-item h3{ font-family:var(--display); font-style:italic; font-weight:400; font-size:1.15rem; margin-bottom:6px; }
+  .info-item p{ color:var(--ink-dim); font-size:0.88rem; }
+  @media (max-width:760px){ .info-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- STORE AREA ---------- */
+  .store-section{ padding:72px 0 100px; }
+  .store-frame{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:40px;
+    min-height:340px;
+  }
+  .store-placeholder{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:60px 20px;
+    gap:16px;
+  }
+  .store-placeholder .glyph{
+    width:52px; height:52px; border-radius:50%;
+    background:radial-gradient(circle at 32% 30%, #d8583c, var(--cadmium) 70%);
+    box-shadow:0 6px 18px rgba(0,0,0,0.35);
+  }
+  .store-placeholder h3{
+    font-family:var(--display); font-style:italic; font-weight:400;
+    font-size:1.3rem; color:var(--ink);
+  }
+  .store-placeholder p{ color:var(--ink-dim); max-width:44ch; font-size:0.92rem; }
+  .store-placeholder code{
+    font-family:var(--mono); font-size:0.72rem; color:var(--ochre);
+    background:var(--bg-alt); padding:3px 8px; border-radius:2px;
+  }
+
+  /* Light-touch overrides so an embedded Ecwid widget leans dark-mode.
+     Ecwid also has its own Design settings in-dashboard for deeper theming. */
+  #my-store-front-panel, .ec-store{
+    color-scheme: dark;
+  }
+
+  footer{ border-top:1px solid var(--line); background:var(--bg-alt); padding:64px 0 40px; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px; }
+  footer h2{ font-family:var(--display); font-weight:400; font-size:clamp(1.7rem,3vw,2.3rem); max-width:14ch; }
+  .contact-links{ display:flex; gap:28px; flex-wrap:wrap; }
+  .contact-links a{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; text-decoration:none; color:var(--ink-dim); border-bottom:1px solid var(--line); padding-bottom:4px; transition:color .25s, border-color .25s; }
+  .contact-links a:hover, .contact-links a:focus-visible{ color:var(--ochre); border-color:var(--ochre); }
+  .fineprint{ margin-top:48px; font-family:var(--mono); font-size:0.62rem; color:var(--ink-dim); opacity:0.6; letter-spacing:0.04em; }
+
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--ochre); outline-offset:3px; }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto !important; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="index.html" class="wordmark">LUKE<span>.</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html#work">Selected Work</a></li>
+      <li><a href="gallery.html">Full Gallery</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="gallery.html" class="pill">Gallery</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Prints</span>
+    <h1 class="hero-title">Take one home.</h1>
+    <p class="hero-sub">Fine-art prints of original paintings, printed and shipped to order. Each piece is made after you order it — nothing sits in a warehouse.</p>
+  </div>
+</header>
+
+<section class="info-strip">
+  <div class="wrap">
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="num">01</span>
+        <h3>Made to order</h3>
+        <p>Every print is produced fresh when you order — no stock, no waste, and colors matched to the original as closely as printing allows.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">02</span>
+        <h3>Multiple sizes</h3>
+        <p>Prints are available in a range of sizes and finishes, from small paper prints to framed and canvas options — pick what suits your wall.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">03</span>
+        <h3>Shipped direct</h3>
+        <p>Orders are printed and shipped by the print partner directly to you, usually within a week or two depending on size and finish.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="store-section">
+  <div class="wrap">
+    <div class="store-frame">
+
+      <!--
+        ECWID STORE EMBED GOES HERE.
+        Replace this entire placeholder block (including the comment)
+        with the snippet from your Ecwid dashboard:
+        Website → "Add your store to one more website" → Other platforms → Copy code.
+        It will look like:
+
+        <script type="text/javascript" src="https://app.ecwid.com/script.js?STORE_ID&data_platform=code..."></script>
+        <div id="my-store-STORE_ID"></div>
+        <script type="text/javascript"> xProductBrowser(...); </script>
+
+        Once pasted in, products you add in Ecwid/Printful will show up
+        here automatically — no further changes needed on this page.
+      -->
+      <div class="store-placeholder">
+        <div class="glyph"></div>
+        <h3>Shop coming soon</h3>
+        <p>This is where your print store will appear. Once your Ecwid store is connected to Printful, paste your embed snippet in place of this block — look for <code>&lt;!-- ECWID STORE EMBED GOES HERE --&gt;</code> in the page source.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Questions about a print?</h2>
+    <div class="contact-links">
+      <a href="mailto:warnela99@gmail.com">Email</a>
+      <a href="https://instagram.com/TheLWGallery" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://youtube.com/@PizzaWhon" target="_blank" rel="noopener">YouTube — daily practice</a>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="fineprint">© 2026 Luke. Prints fulfilled and shipped by a third-party print partner.</p>
+  </div>
+</footer>
+
+</body>
+</html>
