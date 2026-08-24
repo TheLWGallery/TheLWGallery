@@ -210,7 +210,6 @@
     <a href="index.html" class="wordmark">LUKE<span>.</span></a>
     <ul class="navlinks">
       <li><a href="#work">Work</a></li>
-      <li><a href="#practice">Practice</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="gallery.html" class="pill">Full Gallery</a></li>
     </ul>
@@ -314,26 +313,13 @@
   </div>
 </section>
 
-<section class="practice" id="practice">
-  <div class="wrap">
-    <div class="practice-copy">
-      <h2>Daily practice</h2>
-      <p>One small study most days — a discipline more than a portfolio piece. This log tracks the streak, not the outcome.</p>
-    </div>
-    <div>
-      <div class="streak" id="streak"></div>
-      <div class="streak-note">45 days — one square per session</div>
-    </div>
-  </div>
-</section>
-
 <footer id="contact">
   <div class="wrap">
     <h2>Let's talk about a piece.</h2>
     <div class="contact-links">
-      <a href="mailto:hello@example.com">Email</a>
-      <a href="#">Instagram</a>
-      <a href="#">YouTube — daily practice</a>
+      <a href="mailto:warnela99@gmail.com">Email</a>
+      <a href="https://instagram.com/TheLWGallery" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://youtube.com/@PizzaWhon" target="_blank" rel="noopener">YouTube — daily practice</a>
     </div>
   </div>
   <div class="wrap">
@@ -342,18 +328,6 @@
 </footer>
 
 <script>
-  const streakEl = document.getElementById('streak');
-  const days = 45;
-  for (let i = 0; i < days; i++) {
-    const s = document.createElement('i');
-    const skip = (i % 7 === 3) || (i % 11 === 0 && i > 0);
-    if (!skip) {
-      s.classList.add('on');
-      s.style.setProperty('--o', (0.45 + Math.random() * 0.55).toFixed(2));
-    }
-    streakEl.appendChild(s);
-  }
-
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
